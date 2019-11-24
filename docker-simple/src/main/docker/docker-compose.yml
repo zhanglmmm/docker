@@ -1,0 +1,74 @@
+version: '3'
+networks:
+  mynetwork:
+    external:
+      name: zlm_net
+    #ipam:
+    #  driver: mynetwork
+    #  config:
+    #    - subnet: "192.168.1.0/24"
+    #      #gateway: 192.168.2.2
+services:
+  eurekaservice:
+    image: zlm.docker.com:5000/zlm-simple/eureka-server:0.1
+    #hostname: eurekaservice
+    deploy:
+      mode: replicated
+      replicas: 1
+    ports:
+      - "1001:1001"
+    expose:
+      - "1001"
+    extra_hosts:
+      - "www.server001.com:192.168.2.128"
+    environment:
+      - spring.profiles.active=server001
+      - spring.cloud.inetutils.preferredNetworks=10.0
+      #- spring.cloud.inetutils.ignoredInterfaces=eth0,eth1
+    networks:
+      - mynetwork
+        #aliases:
+        #  - eurekaservice
+        #ipv4_address: 192.168.2.128
+  userservice:
+    image: zlm.docker.com:5000/zlm-simple/docker-user:0.1
+    depends_on:
+      - "eurekaservice"  
+    deploy:
+      mode: replicated
+      replicas: 2
+    #hostname: userservice
+    extra_hosts:
+      - "www.server001.com:192.168.2.128"
+    ports:
+      - "1003:1003"
+    environment:
+      - spring.profiles.active=test
+      - spring.cloud.inetutils.preferredNetworks=10.0
+      #- spring.cloud.inetutils.ignoredInterfaces=eth0,eth1
+    networks:
+      - mynetwork
+        #aliases:
+        #  - eurekaservice
+  simple:
+    image: zlm.docker.com:5000/zlm-simple/docker-simple:0.1
+    depends_on:
+      - "eurekaservice"
+    deploy:
+      mode: replicated
+      replicas: 1
+      #endpoint_mode: vip
+    #container_name: simple
+    #hostname: simple
+    extra_hosts:
+      - "www.server001.com:192.168.2.128"
+    ports:
+      - "1002:1002"
+    environment:
+      - spring.profiles.active=test
+      - spring.cloud.inetutils.preferredNetworks=10.0
+      #- spring.cloud.inetutils.ignoredInterfaces=eth0,eth1
+    networks:
+      - mynetwork
+        #aliases:
+        #  - eurekaservice

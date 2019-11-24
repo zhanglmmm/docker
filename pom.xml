@@ -1,0 +1,64 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>zlm.study</groupId>
+  <artifactId>parent</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  
+  <parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.10.RELEASE</version>
+		<relativePath/><!-- lookup parent from repository -->
+	</parent>
+  <modules>
+  	<module>eureka-server</module>
+  	<module>docker-user</module>
+  	<module>docker-simple</module>
+  	<!--  
+  	
+  	<module>../study-provider-user</module>
+    <module>../study-customer-movie</module>
+    <module>../study-customer-movie-feign</module>
+    <module>../study-customer-movie-without-eurekaribbon</module>
+    -->
+  </modules>
+  
+  <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+    	<profile>
+    		<id>dev</id>
+    		<properties>
+			    <docker.reposity>zlm.docker.com:5000</docker.reposity>
+			    <docker.namespace>zlm-simple</docker.namespace>
+			    <docker.package>zlm</docker.package>
+			    <docker.version>0.1</docker.version>
+    		</properties>
+    		<activation>
+    			<activeByDefault>true</activeByDefault>
+    		</activation>
+    	</profile>
+    	<profile>
+    		<id>test</id>
+    		<properties>
+			    <docker.reposity>registry.cn-hangzhou.aliyuncs.com</docker.reposity>
+			    <docker.namespace>zlm-simple</docker.namespace>
+			    <docker.package>zlm</docker.package>
+			    <docker.version>0.1</docker.version>
+    		</properties>
+    	</profile>
+    </profiles>
+</project>
