@@ -6,6 +6,7 @@
     <groupId>zlm.study</groupId>
     <artifactId>parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../</relativePath>
   </parent>
   <artifactId>eureka-server</artifactId>
   <name>eureka-server</name>
